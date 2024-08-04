@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תרגול חלוקה לרבעונים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .options {
+            margin-right: 20px;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>תרגול חלוקה לרבעונים</h1>
+        <div id="quizArea"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "איזה חודש שייך לרבעון הראשון?",
+                options: ["אפריל", "מאי", "מרץ", "יולי"],
+                correctAnswer: 2
+            },
+            {
+                question: "כמה חודשים יש בכל רבעון?",
+                options: ["2", "3", "4", "6"],
+                correctAnswer: 1
+            },
+            {
+                question: "באיזה רבעון נמצא חודש אוגוסט?",
+                options: ["ראשון", "שני", "שלישי", "רביעי"],
+                correctAnswer: 2
+            },
+            {
+                question: "מהו החודש הראשון של הרבעון השני?",
+                options: ["מרץ", "אפריל", "מאי", "יוני"],
+                correctAnswer: 1
+            },
+            {
+                question: "באיזה רבעון מתחילה השנה הקלנדרית?",
+                options: ["ראשון", "שני", "שלישי", "רביעי"],
+                correctAnswer: 0
+            },
+            {
+                question: "איזה מהחודשים הבאים אינו ברבעון הרביעי?",
+                options: ["אוקטובר", "נובמבר", "דצמבר", "ספטמבר"],
+                correctAnswer: 3
+            },
+            {
+                question: "כמה רבעונים יש בשנה?",
+                options: ["2", "3", "4", "6"],
+                correctAnswer: 2
+            },
+            {
+                question: "באיזה רבעון נמצא חודש יוני?",
+                options: ["ראשון", "שני", "שלישי", "רביעי"],
+                correctAnswer: 1
+            },
+            {
+                question: "מהו החודש האחרון של הרבעון השלישי?",
+                options: ["יולי", "אוגוסט", "ספטמבר", "אוקטובר"],
+                correctAnswer: 2
+            },
+            {
+                question: "איזה רבעון מסתיים בסוף השנה הקלנדרית?",
+                options: ["ראשון", "שני", "שלישי", "רביעי"],
+                correctAnswer: 3
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const quizArea = document.getElementById('quizArea');
+            const questionData = questions[currentQuestion];
+            
+            let questionHtml = `<div class="question">
+                <h3>שאלה ${currentQuestion + 1} מתוך 10:</h3>
+                <p>${questionData.question}</p>
+                <div class="options">`;
+            
+            for (let i = 0; i < questionData.options.length; i++) {
+                questionHtml += `<div>
+                    <input type="radio" name="answer" id="option${i}" value="${i}">
+                    <label for="option${i}">${questionData.options[i]}</label>
+                </div>`;
+            }
+            
+            questionHtml += `</div>
+                <button onclick="checkAnswer()">שלח תשובה</button>
+                <div id="feedback" class="feedback"></div>
+            </div>`;
+            
+            quizArea.innerHTML = questionHtml;
+        }
+
+        function checkAnswer() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (!selectedAnswer) {
+                alert('אנא בחר תשובה');
+                return;
+            }
+
+            const userAnswer = parseInt(selectedAnswer.value);
+            const correctAnswer = questions[currentQuestion].correctAnswer;
+            const feedback = document.getElementById('feedback');
+
+            if (userAnswer === correctAnswer) {
+                feedback.innerHTML = 'נכון! כל הכבוד!';
+                score++;
+            } else {
+                feedback.innerHTML = `לא נכון. התשובה הנכונה היא: ${questions[currentQuestion].options[correctAnswer]}`;
+            }
+
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                setTimeout(showQuestion, 2000);
+            } else {
+                setTimeout(showResult, 2000);
+            }
+        }
+
+        function showResult() {
+            const quizArea = document.getElementById('quizArea');
+            quizArea.innerHTML = `<div id="result">
+                <h2>סיימת את המשחק!</h2>
+                <p>הציון שלך: ${score} מתוך 10</p>
+                <button onclick="startQuiz()">שחק שוב</button>
+            </div>`;
+        }
+
+        // התחל את המשחק מיד עם טעינת הדף
+        window.onload = startQuiz;
+    </script>
+</body>
+</html>
